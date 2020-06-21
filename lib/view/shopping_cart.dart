@@ -8,7 +8,9 @@ import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import 'package:shop/l10n/gallery_localizations.dart';
+import 'package:shop/l10n/strings_resource.dart';
 import 'package:shop/layout/letter_spacing.dart';
+import 'package:shop/view/widget/CommonButton.dart';
 import 'colors.dart';
 import 'expanding_bottom_sheet.dart';
 import 'package:shop/model/app_state_model.dart';
@@ -18,6 +20,7 @@ import 'theme.dart';
 const _startColumnWidth = 60.0;
 const _ordinalSortKeyName = 'shopping_cart';
 
+/// ui-购物车边栏界面
 class ShoppingCartPage extends StatefulWidget {
   @override
   _ShoppingCartPageState createState() => _ShoppingCartPageState();
@@ -105,26 +108,28 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                     child: Semantics(
                       sortKey:
                           const OrdinalSortKey(3, name: _ordinalSortKeyName),
-                      child: RaisedButton(
-                        shape: const BeveledRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(7)),
-                        ),
-                        color: shrinePink100,
-                        splashColor: shrineBrown600,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          child: Text(
-                            GalleryLocalizations.of(context)
-                                .shrineCartClearButtonCaption,
-                            style: TextStyle(
-                                letterSpacing:
-                                    letterSpacingOrNone(largeLetterSpacing)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          CommonButton(
+                              onPressed: model.isCartEmpty? null: () {
+                                  model.settleCart();
+                                  ExpandingBottomSheet.of(context).close();
+                                  // tips 交易成功显示
+                                },
+                              text: TextRes.SETTLE_ORDER),
+                          SizedBox(
+                            height: 10,
                           ),
-                        ),
-                        onPressed: () {
-                          model.clearCart();
-                          ExpandingBottomSheet.of(context).close();
-                        },
+                          CommonButton(
+                            onPressed: () {
+                              model.clearCart();
+                              ExpandingBottomSheet.of(context).close();
+                            },
+                            text: GalleryLocalizations.of(context)
+                                .shrineCartClearButtonCaption,
+                          )
+                        ],
                       ),
                     ),
                   ),

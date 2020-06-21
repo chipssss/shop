@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shop/Utils.dart';
 
+import 'order.dart';
 import "product.dart";
 import 'products_repository.dart';
 
@@ -17,6 +18,7 @@ double _shippingCostPerItem = 7;
 class AppStateModel extends Model {
   // All the available products.
   List<Product> _availableProducts;
+  List<Order> _userOrderList = [];
 
   // The currently selected category of products.
   Category _selectedCategory = categoryAll;
@@ -51,6 +53,9 @@ class AppStateModel extends Model {
 
   // Total cost to order everything in the cart.
   double get totalCost => subtotalCost + shippingCost + tax;
+
+  // 购物车是否为空
+  bool get isCartEmpty => _productsInCart.isEmpty;
 
   // Returns a copy of the list of available products, filtered by category.
   List<Product> getProducts(BuildContext context) {
@@ -130,5 +135,13 @@ class AppStateModel extends Model {
   @override
   String toString() {
     return 'AppStateModel(totalCost: $totalCost)';
+  }
+
+  void settleCart() {
+    // 后续如有引入账户余额计划，可在此加入数据层的判断逻辑
+    // 交易成功，记录交易状态生成订单
+    _userOrderList.add(Order(_productsInCart, totalCost, subtotalCost, tax, shippingCost));
+    print("settleCart finish, orderList: $_userOrderList");
+    clearCart();
   }
 }
