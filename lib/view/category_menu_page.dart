@@ -7,6 +7,7 @@ import 'package:scoped_model/scoped_model.dart';
 
 import 'package:shop/data/gallery_options.dart';
 import 'package:shop/l10n/gallery_localizations.dart';
+import 'package:shop/l10n/strings_resource.dart';
 import 'package:shop/layout/adaptive.dart';
 import 'package:shop/layout/text_scale.dart';
 import '../constants.dart';
@@ -24,11 +25,14 @@ double desktopCategoryMenuPageWidth({
 }
 
 class CategoryMenuPage extends StatelessWidget {
-  const CategoryMenuPage({Key key, this.onCategoryTap, this.onSearchChange})
+  CategoryMenuPage({Key key, this.onCategoryTap, this.onSearchChange, @required this.tabController})
       : super(key: key);
 
   final VoidCallback onCategoryTap;
+  final TabController tabController;
   final DataCallback<String> onSearchChange;
+
+  Duration _tabSwitchDuration = const Duration(milliseconds: 0);
 
   Widget _buttonText(String caption, TextStyle style) {
     return Padding(
@@ -72,6 +76,7 @@ class CategoryMenuPage extends StatelessWidget {
         button: true,
         child: GestureDetector(
           onTap: () {
+            tabController.animateTo(0, duration: _tabSwitchDuration);
             model.setCategory(category);
             if (onCategoryTap != null) {
               onCategoryTap();
@@ -128,6 +133,19 @@ class CategoryMenuPage extends StatelessWidget {
                   for (final category in categories)
                     _buildCategory(category, context),
                   _divider(context: context),
+                  Semantics(
+                    button: true,
+                    child: GestureDetector(
+                      onTap: () {
+                        tabController.animateTo(1, duration: _tabSwitchDuration);
+                        Navigator.of(context).pushNamed(ShrineApp.orderRoute);
+                      },
+                      child: _buttonText(
+                        TextRes.ORDER,
+                        logoutTextStyle,
+                      ),
+                    ),
+                  ),
                   Semantics(
                     button: true,
                     child: GestureDetector(

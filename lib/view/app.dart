@@ -12,6 +12,7 @@ import 'expanding_bottom_sheet.dart';
 import 'home.dart';
 import 'login.dart';
 import 'package:shop/model/app_state_model.dart';
+import 'order.dart';
 import 'page_status.dart';
 import 'scrim.dart';
 import 'supplemental/layout_cache.dart';
@@ -19,10 +20,15 @@ import 'theme.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class ShrineApp extends StatefulWidget {
+
   const ShrineApp();
 
   static const String loginRoute = '/shrine/login';
   static const String homeRoute = '/shrine';
+  static const String orderRoute = '/shrine/order';
+
+  static const int PAGE_INDEX_PRODUCT = 0;
+  static const int PAGE_INDEX_ORDER = 1;
 
   @override
   _ShrineAppState createState() => _ShrineAppState();
@@ -31,19 +37,23 @@ class ShrineApp extends StatefulWidget {
 class _ShrineAppState extends State<ShrineApp> with TickerProviderStateMixin {
   // Controller to coordinate both the opening/closing of backdrop and sliding
   // of expanding bottom sheet
-  AnimationController _controller;
+  AnimationController _menuController;
 
   // Animation Controller for expanding/collapsing the cart menu.
   AnimationController _expandingController;
+
+  TabController _tabController;
+  static const int TAB_LEN = 2;
 
   AppStateModel _model;
 
   final Map<String, List<List<int>>> _layouts = {};
 
+
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+    _menuController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 450),
       value: 1,
@@ -52,34 +62,50 @@ class _ShrineAppState extends State<ShrineApp> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
+    _tabController = TabController(length: TAB_LEN, vsync: this)..addListener(() {setState(() {});});
     _model = AppStateModel()..loadProducts();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _menuController.dispose();
     _expandingController.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 
   Widget mobileBackdrop() {
     return Backdrop(
-      frontLayer: const ProductPage(),
+      frontLayer: buildPageView(),
       backLayer: CategoryMenuPage(
-          onCategoryTap: () => _controller.forward(),
-          onSearchChange: onSearchChange),
+          onCategoryTap: () => _menuController.forward(),
+          onSearchChange: onSearchChange, tabController: _tabController,),
       frontTitle: const Text('SHRINE'),
       backTitle: Text(GalleryLocalizations.of(context).shrineMenuCaption),
-      controller: _controller,
+      controller: _menuController,
     );
   }
 
   Widget desktopBackdrop() {
     return DesktopBackdrop(
-      frontLayer: ProductPage(),
+      frontLayer: buildPageView(),
       backLayer: CategoryMenuPage(
-        onSearchChange: onSearchChange
+        onCategoryTap: () {
+
+        },
+        onSearchChange: onSearchChange, tabController: _tabController,
       ),
+    );
+  }
+  
+  Widget buildPageView() {
+    return TabBarView(
+      controller: _tabController,
+      children: [
+        ProductPage(),
+        OrderView()
+      ],
+      physics: NeverScrollableScrollPhysics(),
     );
   }
 
@@ -108,13 +134,13 @@ class _ShrineAppState extends State<ShrineApp> with TickerProviderStateMixin {
     final Widget home = LayoutCache(
       layouts: _layouts,
       child: PageStatus(
-        menuController: _controller,
+        menuController: _menuController,
         cartController: _expandingController,
         child: HomePage(
           backdrop: backdrop,
           scrim: Scrim(controller: _expandingController),
           expandingBottomSheet: ExpandingBottomSheet(
-            hideController: _controller,
+            hideController: _menuController,
             expandingController: _expandingController,
           ),
         ),
@@ -138,7 +164,12 @@ class _ShrineAppState extends State<ShrineApp> with TickerProviderStateMixin {
           },
           routes: {
             ShrineApp.loginRoute: (context) => const LoginPage(),
-            ShrineApp.homeRoute: (context) => home,
+            ShrineApp.homeRoute: (context) {
+              return home;
+            },
+            ShrineApp.orderRoute: (context) {
+              return home;
+            }
           },
           theme: shrineTheme.copyWith(
             platform: GalleryOptions.of(context).platform,
@@ -152,3 +183,6 @@ class _ShrineAppState extends State<ShrineApp> with TickerProviderStateMixin {
     );
   }
 }
+
+
+
