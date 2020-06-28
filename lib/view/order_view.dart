@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -9,7 +11,10 @@ import 'package:shop/model/app_state_model.dart';
 import 'package:shop/model/evalutaion.dart';
 import 'package:shop/model/order.dart';
 import 'package:shop/model/product.dart';
+import 'package:shop/view/widget/CommonButton.dart';
 import 'package:shop/view/widget/card_item.dart';
+import 'package:shop/view/widget/start_widget.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 import 'colors.dart';
 import 'shopping_cart.dart';
@@ -73,9 +78,6 @@ class OrderItemView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: cartItemList
             ..addAll([
-              const Divider(
-                color: shrinePink100,
-              ),
               Align(
                 alignment: Alignment.bottomRight,
                 child: Padding(
@@ -140,7 +142,7 @@ class _ShopItem extends StatelessWidget {
     final localTheme = Theme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8,8,8,0),
+      padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
       child: Column(
         children: [
           Row(
@@ -187,12 +189,12 @@ class _ShopItem extends StatelessWidget {
                         alignment: Alignment.bottomRight,
                         child: evaluation == null
                             ? FlatButton(
-                                onPressed: () {
-                                  onEvaluation(product);
-                                },
-                                child: Text(TextRes.ORDER_EVALUATION),
-                              )
-                            : Text('具体评价星星'),
+                          child: Text(TextRes.ORDER_EVALUATION),
+                          onPressed: () {
+                            onEvaluation(product);
+                          },
+                        )
+                            : SmoothStarRating(isReadOnly: true, color: shrinePink400, rating: evaluation.score,),
                       )
                     ],
                   ),
@@ -200,9 +202,12 @@ class _ShopItem extends StatelessWidget {
               ),
             ],
           ),
+          SizedBox(
+            height: 4,
+          ),
           const Divider(
-            color: shrinePink100,
-            height: 10,
+            color: shrineBrown600,
+            height: 16,
           )
         ],
       ),
