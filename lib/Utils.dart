@@ -8,3 +8,7 @@ bool stringIsNullOrEmpty(String value) {
 String currentTime() {
   return new DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now());
 }
+
+class GlobalConfig {
+  static get isDebug => true;
+}

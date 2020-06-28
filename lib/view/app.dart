@@ -6,13 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:shop/data/gallery_options.dart';
 import 'package:shop/l10n/gallery_localizations.dart';
 import 'package:shop/layout/adaptive.dart';
+import '../Utils.dart';
 import 'backdrop.dart';
 import 'category_menu_page.dart';
 import 'expanding_bottom_sheet.dart';
 import 'home.dart';
 import 'login.dart';
 import 'package:shop/model/app_state_model.dart';
-import 'order.dart';
+import 'order_view.dart';
 import 'page_status.dart';
 import 'scrim.dart';
 import 'supplemental/layout_cache.dart';
@@ -62,7 +63,7 @@ class _ShrineAppState extends State<ShrineApp> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
-    _tabController = TabController(length: TAB_LEN, vsync: this)..addListener(() {setState(() {});});
+    _tabController = TabController(length: TAB_LEN, vsync: this);
     _model = AppStateModel()..loadProducts();
   }
 
@@ -103,7 +104,7 @@ class _ShrineAppState extends State<ShrineApp> with TickerProviderStateMixin {
       controller: _tabController,
       children: [
         ProductPage(),
-        OrderView()
+        OrderPage()
       ],
       physics: NeverScrollableScrollPhysics(),
     );
@@ -154,7 +155,7 @@ class _ShrineAppState extends State<ShrineApp> with TickerProviderStateMixin {
         child: MaterialApp(
           title: 'Shrine',
           debugShowCheckedModeBanner: false,
-          initialRoute: ShrineApp.loginRoute,
+          initialRoute: GlobalConfig.isDebug? ShrineApp.homeRoute: ShrineApp.loginRoute,
           onGenerateInitialRoutes: (_) {
             return [
               MaterialPageRoute<void>(

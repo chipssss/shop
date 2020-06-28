@@ -6,6 +6,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shop/Utils.dart';
+import 'package:shop/data/mock_data.dart';
 
 import 'order.dart';
 import "product.dart";
@@ -15,9 +16,12 @@ double _salesTaxRate = 0.06;
 double _shippingCostPerItem = 7;
 
 class AppStateModel extends Model {
+
+
   // All the available products.
   List<Product> _availableProducts;
   List<Order> _userOrderList = [];
+  List<Order> get userOrderList => _userOrderList;
 
   // The currently selected category of products.
   Category _selectedCategory = categoryAll;
@@ -142,5 +146,12 @@ class AppStateModel extends Model {
     _userOrderList.add(Order(_productsInCart, totalCost, subtotalCost, tax, shippingCost));
     print("settleCart finish, orderList: $_userOrderList");
     clearCart();
+  }
+
+  AppStateModel() {
+    // 测试数据
+    if (GlobalConfig.isDebug) {
+      _userOrderList.addAll(MockData.userOrderList);
+    }
   }
 }

@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shop/model/evalutaion.dart';
 
 import '../l10n/gallery_localizations.dart';
 
@@ -43,7 +44,7 @@ List<Category> categories = [
 ];
 
 class Product {
-  const Product({
+  Product({
     @required this.category,
     @required this.id,
     @required this.isFeatured,
@@ -61,6 +62,7 @@ class Product {
   final int id;
   final bool isFeatured;
   final double assetAspectRatio;
+  List<Evaluation> evaluationList = [];
 
   // A function taking a BuildContext as input and
   // returns the internationalized name of the product.
@@ -70,4 +72,8 @@ class Product {
 
   String get assetName => '$id-0.jpg';
   String get assetPackage => 'shrine_images';
+
+  void addEvaluation(Evaluation evaluation) {
+    evaluationList.add(evaluation);
+  }
 }
