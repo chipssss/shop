@@ -11,13 +11,10 @@ import 'package:shop/model/app_state_model.dart';
 import 'package:shop/model/evalutaion.dart';
 import 'package:shop/model/order.dart';
 import 'package:shop/model/product.dart';
-import 'package:shop/view/widget/CommonButton.dart';
 import 'package:shop/view/widget/card_item.dart';
-import 'package:shop/view/widget/start_widget.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 import 'colors.dart';
-import 'shopping_cart.dart';
 
 class OrderPage extends StatelessWidget {
   @override
