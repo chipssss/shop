@@ -23,3 +23,4 @@ const splashPageAnimationDurationInMilliseconds = 300;
 const firstHeaderDesktopTopPadding = 5.0;
 
 typedef DataCallback<T> = void Function(T value);
+typedef DoubleDataCallback<T, F> = void Function(T value1, F value2);

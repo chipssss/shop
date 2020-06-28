@@ -1,13 +1,22 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 
 class CardItem extends StatelessWidget {
   String title;
   Widget child;
+  bool useCard;
+  Color color;
 
-  CardItem({@required this.title, @required this.child});
+  CardItem(
+      {@required this.title,
+      @required this.child,
+      this.useCard = true,
+      this.color});
 
   @override
   Widget build(BuildContext context) {
+    if (color == null) color = Theme.of(context).primaryColor;
     return SafeArea(
         top: false,
         bottom: false,
@@ -21,7 +30,7 @@ class CardItem extends StatelessWidget {
                     new Container(
                       margin: EdgeInsets.only(left: 10.0),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
+                        color: color,
                         borderRadius: BorderRadius.all(Radius.circular(2.0)),
                       ),
                       width: 5.0,
@@ -44,12 +53,17 @@ class CardItem extends StatelessWidget {
                 ),
                 Container(
                     width: double.infinity,
-                    child: Card(
-                        color: Colors.white,
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4)),
-                        child: child)),
+                    child: useCard
+                        ? Card(
+                            color: Colors.white,
+                            elevation: 4,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4)),
+                            child: child)
+                        : Padding(
+                            padding: EdgeInsets.all(6),
+                            child: child,
+                          )),
               ]),
         ));
   }

@@ -6,13 +6,13 @@ import '../theme.dart';
 
 /// Ui-常用控件-按钮，样式再封装
 class CommonButton extends RaisedButton {
-  CommonButton({@required VoidCallback onPressed, @required String text})
+  CommonButton({@required VoidCallback onPressed, @required String text, color = shrinePink100})
       : super(
             onPressed: onPressed,
             shape: const BeveledRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(7)),
             ),
-            color: shrinePink100,
+            color: color,
             splashColor: shrineBrown600,
             child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),

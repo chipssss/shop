@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shop/Utils.dart';
 import 'package:shop/data/mock_data.dart';
+import 'package:shop/model/evalutaion.dart';
 
 import 'order.dart';
 import "product.dart";
@@ -153,5 +154,15 @@ class AppStateModel extends Model {
     if (GlobalConfig.isDebug) {
       _userOrderList.addAll(MockData.userOrderList);
     }
+  }
+
+  static AppStateModel of(BuildContext context) =>
+      ScopedModel.of<AppStateModel>(context);
+
+  void addEvaluation(Order order, Product product, Evaluation evaluation) {
+    evaluation.productId = product.id;
+    order.productEvaluationMap[product.id] = evaluation;
+    product.addEvaluation(evaluation);
+    notifyListeners();
   }
 }

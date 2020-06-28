@@ -10,4 +10,16 @@ class TextRes {
   static const String ORDER_EVALUATION = "评价商品";
 
   static const String ORDER_TOTAL = "总计";
+
+  static const String EVALUATION_PRODUCT_SATIS = "商品满意程度";
+
+  static const String EVALUATION_COMMENT_LABEL = "商品评语";
+
+  static const String EVALUATION_COMMENT_HELPER = "请确保内容真实";
+
+  static const String EVALUATION_COMMENT_HINT = "请输入商品评语";
+
+  static const String EVALUATION_CONFIRM = "确认评价";
+
+  static const String EVALUATION_COMMENT_STRA = "点击星星进行评价";
 }

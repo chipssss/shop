@@ -13,7 +13,7 @@ import 'expanding_bottom_sheet.dart';
 import 'home.dart';
 import 'login.dart';
 import 'package:shop/model/app_state_model.dart';
-import 'order_view.dart';
+import 'order/order_view.dart';
 import 'page_status.dart';
 import 'scrim.dart';
 import 'supplemental/layout_cache.dart';

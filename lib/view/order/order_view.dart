@@ -11,12 +11,25 @@ import 'package:shop/model/app_state_model.dart';
 import 'package:shop/model/evalutaion.dart';
 import 'package:shop/model/order.dart';
 import 'package:shop/model/product.dart';
+import 'package:shop/view/order/evaluation_bottom_sheet.dart';
 import 'package:shop/view/widget/card_item.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
-import 'colors.dart';
+import '../colors.dart';
 
 class OrderPage extends StatelessWidget {
+
+  void _showBottomSheet(BuildContext context, Order order, Product product) {
+    showModalBottomSheet<Evaluation>(context: context, builder: (context) {
+      return EvaluationBottomSheet();
+    }).then((value) {
+      if (value != null) {
+        AppStateModel.of(context).addEvaluation(order, product, value);
+      }
+      print('回传：$value');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<AppStateModel>(
@@ -40,6 +53,9 @@ class OrderPage extends StatelessWidget {
                   return OrderItemView(
                     order: model.userOrderList[index],
                     model: model,
+                    onEvaluation: (product) {
+                      _showBottomSheet(context, model.userOrderList[index], product);
+                    }
                   );
                 },
               ),
@@ -55,8 +71,9 @@ class OrderPage extends StatelessWidget {
 class OrderItemView extends StatelessWidget {
   final Order order;
   final AppStateModel model;
+  final DataCallback<Product> onEvaluation;
 
-  OrderItemView({Key key, this.order, this.model}) : super(key: key);
+  OrderItemView({Key key, this.order, this.model, this.onEvaluation}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -107,9 +124,7 @@ class OrderItemView extends StatelessWidget {
         .map((e) => _ShopItem(
               product: model.getProductById(e.key),
               quantity: e.value,
-              onEvaluation: (product) {
-                // todo 显示底部评价界面
-              },
+              onEvaluation: onEvaluation,
               evaluation: order.productEvaluationMap[e.key],
             ))
         .toList();
