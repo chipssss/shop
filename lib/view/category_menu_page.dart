@@ -163,6 +163,7 @@ class CategoryMenuPage extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.all(6),
                     child: TextFormField(
+                      // 文本更改监听
                       onChanged: onSearchChange,
                       cursorColor: shrineBrown600,
                       decoration: InputDecoration(

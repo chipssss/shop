@@ -80,7 +80,7 @@ class EvaluationState extends State<EvaluationBottomSheet> {
             spaceBox,
             Padding(
               padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child: CommonButton(
+              child: CommonButton( // 评价页面确认评价按钮
                   onPressed: () {
                     Navigator.of(context).pop(Evaluation(rate, comment));
                   },

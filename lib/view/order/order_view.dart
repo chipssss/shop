@@ -23,7 +23,10 @@ class OrderPage extends StatelessWidget {
     showModalBottomSheet<Evaluation>(context: context, builder: (context) {
       return EvaluationBottomSheet();
     }).then((value) {
+      // 路由层回传给上层组件
       if (value != null) {
+        // 通过Scoped_Model 调用model层事件
+        // 并通过观察者模式通知其他ui刷新数据
         AppStateModel.of(context).addEvaluation(order, product, value);
       }
       print('回传：$value');
@@ -50,10 +53,11 @@ class OrderPage extends StatelessWidget {
               child: ListView.builder(
                 itemCount: model.userOrderList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return OrderItemView(
+                  return OrderItemView( // OrderItemView为封装的控件
                     order: model.userOrderList[index],
                     model: model,
                     onEvaluation: (product) {
+                      // 传入Order实体，显示底部栏目
                       _showBottomSheet(context, model.userOrderList[index], product);
                     }
                   );

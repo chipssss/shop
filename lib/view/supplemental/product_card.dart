@@ -78,12 +78,14 @@ Widget _buildProductCard({
   );
 
   return ScopedModelDescendant<AppStateModel>(
+    // 1. 通过ScopedModel拿到Model对象
     builder: (context, child, model) {
       return Semantics(
         hint:
             GalleryLocalizations.of(context).shrineScreenReaderProductAddToCart,
         child: GestureDetector(
           onTap: () {
+            // 2. model对象响应点击操作，将商品添加到购物车中
             model.addProductToCart(product.id);
           },
           child: child,
